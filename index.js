@@ -23,6 +23,18 @@ console.log(uri);
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+async function run() {
+    try {
+
+    }
+
+    finally {
+
+    }
+}
+
+run().catch(err => console.error(err))
+
 
 app.get('/', (req, res) => {
     res.send('Photography-with-Labib server is running')
