@@ -51,6 +51,14 @@ async function run() {
             res.send(service);
         });
 
+        app.get('/allservices/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const service = await serviceCollection.findOne(query);
+            // console.log(service);
+            res.send(service);
+        });
+
 
     }
 
@@ -64,11 +72,11 @@ run().catch(err => console.error(err))
 
 
 app.get('/', (req, res) => {
-    res.send('Photography-with-Labib server is running')
+    res.send('Pixel-Flash server is running')
 })
 
 app.listen(port, () => {
-    console.log(`Photography-with-Labib server running on ${port}`);
+    console.log(`Pixel-Flash server running on ${port}`);
 })
 
 
