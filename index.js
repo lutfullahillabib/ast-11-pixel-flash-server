@@ -62,29 +62,7 @@ async function run() {
             res.send(result);
         });
 
-        // reviewsss
-
-        app.get("/reviews", async (req, res) => {
-            const name = req.query.serviceName;
-            const query = { serviceName: name };
-            const result = await reviewCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        app.post('/review', async (req, res) => {
-            const review = req.body;
-            const result = await reviewCollection.insertOne(review);
-            res.send(result);
-        });
-
-        app.get('/myReview', async (req, res) => {
-            const email = req.query.email;
-            // console.log(email);
-            const query = { email }
-            const result = await reviewCollection.find(query).toArray();
-            res.send(result);
-
-        })
+    
 
     }
 
