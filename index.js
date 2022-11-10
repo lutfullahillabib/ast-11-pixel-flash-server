@@ -24,20 +24,20 @@ console.log(uri);
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-// function verifyJWT(req, res, next) {
-//     const authHeader = req.headers.authorization;
-//     if (!authHeader) {
-//         res.status(401).send({ message: "unauthorize access" });
-//     }
-//     const token = authHeader.split(" ")[1];
-//     jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE, function (err, decoded) {
-//         if (err) {
-//             res.status(401).send({ message: "unauthorize access" });
-//         }
-//         req.decoded = decoded;
-//         next();
-//     });
-// }
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).send({ message: "Unauthorize Access" });
+    }
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE, function (err, decoded) {
+        if (err) {
+            res.status(403).send({ message: "Forbidden Access" });
+        }
+        req.decoded = decoded;
+        next();
+    });
+}
 
 async function run() {
     try {
@@ -45,13 +45,13 @@ async function run() {
 
         const reviewCollection = client.db('photography').collection('reviews');
 
-        // app.post("/jwt", (req, res) => {
-        //     const user = req.body;
-        //     const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRETE, {
-        //         expiresIn: "1d",
-        //     });
-        //     res.send({ token });
-        // });
+        app.post("/jwt", (req, res) => {
+            const user = req.body;
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRETE, {
+                expiresIn: "1h",
+            });
+            res.send({ token });
+        });
 
 
         // home three services get api
@@ -110,10 +110,22 @@ async function run() {
         });
 
         // my review get - my review page
-        app.get('/myReview', async (req, res) => {
-            const email = req.query.email;
-            // console.log(email);
-            const query = { email }
+        app.get('/myReview', verifyJWT, async (req, res) => {
+
+            const decoded = req.decoded;
+            console.log('inside orders api', decoded);
+
+            if (decoded.email !== req.query.email) {
+                return res.status(403).send({ message: 'Forbidden Access..!!' });
+            }
+
+            let query = {};
+
+            if (req.query.email) {
+                query = { email: req.query.email }
+            }
+
+
             const result = await reviewCollection.find(query).sort({ _id: -1 }).toArray();
             res.send(result);
 
