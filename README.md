@@ -29,7 +29,7 @@
 ## Adding Custom Environment Variables = https://create-react-app.dev/docs/adding-custom-environment-variables/#what-other-env-files-can-be-used
 
 ---
-
+---
 # Server = [(vercel) - APIs]
 
 ## `1. Root = `
@@ -81,4 +81,6 @@
 ## https://ast-11-pixel-flash-server.vercel.app/reviews?serviceName=${name}
 
 ---
+---
+
 
